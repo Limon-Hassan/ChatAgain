@@ -2,3 +2,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.active {
+  background: #FFF;
+  color: #5F35F5;
+}
+
+.sb1:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid #00bfb6;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #00bfb6;
+  border-bottom: 10px solid transparent;
+  right: -19px;
+  top: 6px;
+}
+
+.sb2:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid transparent;
+  border-right: 10px solid #F1F1F1;
+  border-top: 10px solid #F1F1F1;
+  border-bottom: 10px solid transparent;
+  left: -19px;
+  top: 6px;
+}
+
+.mili {
+  text-align: -webkit-right;
+}
