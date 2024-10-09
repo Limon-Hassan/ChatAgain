@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { ref, remove, set, push, getDatabase } from "firebase/database";
+import { useDispatch, useSelector } from "react-redux";
+import { chatiinginfo } from "../slices/Chatslice";
 
 const Delete = ({ item, data }) => {
   let [will, setWill] = useState(false);
   const db = getDatabase();
   let menuref = useRef();
+  let chatData = useSelector((state) => state.chatuserinfo);
+  let disparch = useDispatch(chatData);
   useEffect(() => {
     let handler = (event) => {
       if (!menuref.current.contains(event.target)) {
@@ -47,9 +51,20 @@ const Delete = ({ item, data }) => {
       });
     }
   };
+
+  let handleonclick = (item) => {
+    if (data.uid == item.senderid) {
+      disparch(chatiinginfo({ name: item.receivername, id: item.receiverid }));
+    } else {
+      disparch(chatiinginfo({ name: item.sendername, id: item.senderid }));
+    }
+  };
   return (
     <>
-      <div className="flex items-center justify-between mb-[22px] mt-[20px] border-b-2  border-[rgb(0,0,0,.2)] pb-[12px] ml-[22px] mr-[22px]">
+      <div
+        onClick={() => handleonclick(item)}
+        className="flex items-center justify-between mb-[22px] mt-[20px] border-b-2  border-[rgb(0,0,0,.2)] pb-[12px] ml-[22px] mr-[22px]"
+      >
         <div className="flex items-center">
           {data.uid == item.senderid ? (
             <img

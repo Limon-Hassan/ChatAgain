@@ -9,6 +9,7 @@ import {
   set,
   push,
 } from "firebase/database";
+import Delete from "./Delete";
 const Massage = () => {
   const db = getDatabase();
   let data = useSelector((state) => state.userinfo.value);
@@ -36,18 +37,18 @@ const Massage = () => {
   let handledelete = (item) => {
     remove(ref(db, "firends/" + item.key));
   };
-  let menuref = useRef();
-  useEffect(() => {
-    let handler = (event) => {
-      if (!menuref.current.contains(event.target)) {
-        setWill(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
-  }, [1000]);
+  // let menuref = useRef();
+  // useEffect(() => {
+  //   let handler = (event) => {
+  //     if (!menuref.current.contains(event.target)) {
+  //       setWill(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handler);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handler);
+  //   };
+  // }, [1000]);
 
   let handleblock = (item) => {
     if (data.uid == item.senderid) {
@@ -113,7 +114,7 @@ const Massage = () => {
     <>
       <div className="flex items-center gap-14">
         <div>
-          <div className=" w-[427px] h-[375px] bg-[#FFFFFF] rounded-[20px] overflow-y-scroll shadow-lg mt-[70px] ml-[50px]">
+          <div className=" w-[427px] h-[375px] bg-[#FFFFFF] rounded-[20px] overflow-y-scroll shadow-lg mt-[30px] ml-[50px]">
             <div className="flex justify-between items-center">
               <h3 className="text-[20px] font-Harbal font-semibold text-[#000000] ml-[20px] mt-[13px] ">
                 Friends
@@ -122,80 +123,8 @@ const Massage = () => {
                 <i class="fa-solid fa-ellipsis-vertical text-[19px] text-[#5F35F5] "></i>
               </div>
             </div>
-            {frendlist.map((item) => (
-              <div className="flex items-center justify-between mb-[22px] mt-[20px] border-b-2  border-[rgb(0,0,0,.2)] pb-[12px] ml-[22px] mr-[22px]">
-                <div className="flex items-center">
-                  {data.uid == item.senderid ? (
-                    <img
-                      className="w-[70px] h-[70px] rounded-full"
-                      src={item.receiverimage}
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      className="w-[70px] h-[70px] rounded-full"
-                      src={item.senderimage}
-                      alt=""
-                    />
-                  )}
-                  <div className="ml-[12px] w-[127px]">
-                    {data.uid == item.senderid ? (
-                      <a
-                        className="text-[16px] font-Harbal font-semibold text-[#000000]"
-                        href="#"
-                      >
-                        {item.receivername}
-                      </a>
-                    ) : (
-                      <a
-                        className="text-[16px] font-Harbal font-semibold text-[#000000]"
-                        href="#"
-                      >
-                        {item.sendername}
-                      </a>
-                    )}
-                    <p className="text-[12px] font-Harbal font-normal text-[rgb(77,77,77,7.5)] ">
-                      Dinner?
-                    </p>
-                  </div>
-                </div>
-                <div ref={menuref} className="flex items-center relative">
-                  <p className="text-[12px] font-Harbal font-medium text-black/50 mr-[21px]">
-                    {moment().calendar()}
-                  </p>
-
-                  <button
-                    onClick={() => setWill((will) => !will)}
-                    className="hover:bg-[rgb(34,31,31,.3)]  hover:rounded-full w-[32px] h-[32px] ease-in-out duration-300"
-                  >
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                  </button>
-                  {will == true ? (
-                    <div className="w-[175px]  bg-white p-2 absolute top-[40px] left-[-10px] rounded-lg shadow-[0px_0px_4px_3px_rgba(0,0,0,0.1)] ">
-                      <div
-                        onClick={() => handledelete(item)}
-                        className="mb-2 w-full h-full  hover:bg-cyan-400"
-                      >
-                        <span className="ml-2">Unfriend</span>
-                      </div>
-                      <div
-                        onClick={() => handleblock(item)}
-                        className="mb-2 w-full h-full  hover:bg-cyan-400"
-                      >
-                        <span className="ml-2">Block</span>
-                      </div>
-                      <div className="mb-2 w-full h-full  hover:bg-cyan-400">
-                        <span className="ml-2">#Something</span>
-                      </div>
-                      <div className=" w-full h-full  hover:bg-cyan-400">
-                        <span className="ml-2">#Something</span>
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
+            {frendlist.map((item, index) => (
+              <Delete item={item} data={data} key={index} />
             ))}
           </div>
           {tension == true ? (
@@ -335,7 +264,13 @@ const Massage = () => {
                   I'm speech bubble
                 </div>
                 <div class="box sb2 w-[300px] bg-[#F1F1F1] p-[20px] text-center text-[#707070] relative">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, fuga ab reprehenderit nostrum consectetur similique, eos libero qui placeat asperiores quas, laboriosam doloremque eligendi incidunt itaque vitae velit ea. Vitae excepturi ratione sapiente culpa facere. Eum autem voluptatum omnis asperiores quidem doloremque soluta quam temporibus voluptatibus debitis. Provident, ea molestias.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Impedit, fuga ab reprehenderit nostrum consectetur similique,
+                  eos libero qui placeat asperiores quas, laboriosam doloremque
+                  eligendi incidunt itaque vitae velit ea. Vitae excepturi
+                  ratione sapiente culpa facere. Eum autem voluptatum omnis
+                  asperiores quidem doloremque soluta quam temporibus
+                  voluptatibus debitis. Provident, ea molestias.
                 </div>
 
                 <div className=" mili mt-[40px] ">
