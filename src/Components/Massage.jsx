@@ -1,80 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
-import moment from "moment";
 import { useSelector } from "react-redux";
-import {
-  getDatabase,
-  onValue,
-  ref,
-  remove,
-  set,
-  push,
-} from "firebase/database";
+import { getDatabase, onValue, ref, set, push } from "firebase/database";
+
 import Delete from "./Delete";
 const Massage = () => {
   const db = getDatabase();
   let data = useSelector((state) => state.userinfo.value);
+  let chatdata = useSelector((state) => state.chatuserinfo.value);
   let [frendlist, setFrendlist] = useState([]);
-  let [will, setWill] = useState(false);
+  let [messagelist, setMessagelist] = useState([]);
   useEffect(() => {
     const firendref = ref(db, "firends/");
-    onValue(firendref, (snapshot) => {
-      let array = [];
-      snapshot.forEach((item) => {
-        if (
-          data.uid == item.val().senderid ||
-          data.uid == item.val().receiverid
-        ) {
-          array.push({ ...item.val(), key: item.key });
-        }
-      });
-      setFrendlist(array);
-    });
-  }, []);
-  // let handleohh = () => {
-  //   setWill(true)
-  // }
-
-  let handledelete = (item) => {
-    remove(ref(db, "firends/" + item.key));
-  };
-  // let menuref = useRef();
-  // useEffect(() => {
-  //   let handler = (event) => {
-  //     if (!menuref.current.contains(event.target)) {
-  //       setWill(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handler);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handler);
-  //   };
-  // }, [1000]);
-
-  let handleblock = (item) => {
-    if (data.uid == item.senderid) {
-      set(push(ref(db, "blocklist/")), {
-        blockbyid: data.uid,
-        blockby: data.displayName,
-        blockbyimage: data.photoURL,
-        blockuser: item.receivername,
-        blockuserid: item.receiverid,
-        blockerimage: item.receiverimage,
-      }).then(() => {
-        remove(ref(db, "firends/" + item.key));
-      });
-    } else {
-      set(push(ref(db, "blocklist/")), {
-        blockbyid: data.uid,
-        blockby: data.displayName,
-        blockbyimage: data.photoURL,
-        blockuser: item.sendername,
-        blockuserid: item.senderid,
-        blockerimage: item.senderimage,
-      }).then(() => {
-        remove(ref(db, "firends/" + item.key));
+    if (data !== "null") {
+      onValue(firendref, (snapshot) => {
+        let array = [];
+        snapshot.forEach((item) => {
+          if (
+            data.uid == item.val().senderid ||
+            data.uid == item.val().receiverid
+          ) {
+            array.push({ ...item.val(), key: item.key });
+          }
+        });
+        setFrendlist(array);
       });
     }
-  };
+  }, []);
+  useEffect(() => {
+    const messageref = ref(db, "messagelist/");
+    if (chatdata !== "null") {
+      onValue(messageref, (snapshot) => {
+        let array = [];
+        snapshot.forEach((item) => {
+          array.push({ ...item.val(), key: item.key });
+        });
+        setMessagelist(array);
+      });
+    }
+  }, []);
 
   let [showing, setShowing] = useState(false);
   let [tension, setTension] = useState(false);
@@ -253,8 +216,8 @@ const Massage = () => {
                     alt="dfl"
                   />
                   <div>
-                    <h3>name</h3>
-                    <p>time</p>
+                    <h3></h3>
+                    <p>online</p>
                   </div>
                 </div>
                 <i class="fa-solid fa-ellipsis-vertical"></i>

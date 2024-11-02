@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { ref, remove, set, push, getDatabase } from "firebase/database";
 import { useDispatch, useSelector } from "react-redux";
 import { chatiinginfo } from "../slices/Chatslice";
+import { useEffect, useRef, useState } from "react";
 
 const Delete = ({ item, data }) => {
   let [will, setWill] = useState(false);
@@ -54,9 +54,22 @@ const Delete = ({ item, data }) => {
 
   let handleonclick = (item) => {
     if (data.uid == item.senderid) {
-      disparch(chatiinginfo({ name: item.receivername, id: item.receiverid }));
+      disparch(
+        chatiinginfo({ username: item.receivername, id: item.receiverid })
+      );
     } else {
-      disparch(chatiinginfo({ name: item.sendername, id: item.senderid }));
+      disparch(chatiinginfo({ username: item.sendername, id: item.senderid }));
+    }
+    if (data.uid == item.senderid) {
+      set(push(ref(db, "messagelist/")), {
+        username: item.receivername,
+        userid: item.receiverid,
+      });
+    } else {
+      set(push(ref(db, "messagelist/")), {
+        username: item.sendername,
+        userid: item.senderid,
+      });
     }
   };
   return (
