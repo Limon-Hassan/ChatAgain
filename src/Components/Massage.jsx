@@ -216,7 +216,7 @@ const Massage = () => {
                     alt="dfl"
                   />
                   <div>
-                    <h3></h3>
+                    <h3>{chatdata?.username}</h3>
                     <p>online</p>
                   </div>
                 </div>

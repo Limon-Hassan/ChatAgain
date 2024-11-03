@@ -51,6 +51,22 @@ const Delete = ({ item, data }) => {
       });
     }
   };
+  //   if (data.uid == item.senderid) {
+  //     disparch(
+  //       chatiinginfo({ username: item.receivername, id: item.receiverid })
+  //     );
+  //   } else {
+  //     disparch(chatiinginfo({ username: item.sendername, id: item.senderid }));
+  //   }
+  //   const messageref = ref(db, "messagelist/");
+  //   onValue(messageref, (snapshot) => {
+  //     let array = [];
+  //     snapshot.forEach((item) => {
+  //       array.push({ ...item.val(), key: item.key });
+  //     });
+  //     setMessagelist(array);
+  //   });
+  // }, []);
 
   let handleonclick = (item) => {
     if (data.uid == item.senderid) {
