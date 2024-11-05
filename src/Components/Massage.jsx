@@ -9,6 +9,13 @@ const Massage = () => {
   let chatdata = useSelector((state) => state.chatuserinfo.value);
   let [frendlist, setFrendlist] = useState([]);
   let [messagelist, setMessagelist] = useState([]);
+  let [showing, setShowing] = useState(false);
+  let [tension, setTension] = useState(false);
+  let [error, setError] = useState("");
+  let [inputvalue, setnputValue] = useState("");
+  let [buttonvalue, setButtonvalue] = useState("");
+  let [showevelu, setshowEValue] = useState([]);
+  let [massage, setMassage] = useState("");
   useEffect(() => {
     const firendref = ref(db, "firends/");
     if (data !== "null") {
@@ -26,25 +33,6 @@ const Massage = () => {
       });
     }
   }, []);
-  useEffect(() => {
-    const messageref = ref(db, "messagelist/");
-    if (chatdata !== "null") {
-      onValue(messageref, (snapshot) => {
-        let array = [];
-        snapshot.forEach((item) => {
-          array.push({ ...item.val(), key: item.key });
-        });
-        setMessagelist(array);
-      });
-    }
-  }, []);
-
-  let [showing, setShowing] = useState(false);
-  let [tension, setTension] = useState(false);
-  let [error, setError] = useState("");
-  let [inputvalue, setnputValue] = useState("");
-  let [buttonvalue, setButtonvalue] = useState("");
-  let [showevelu, setshowEValue] = useState([]);
 
   let handleEror = () => {
     setButtonvalue(inputvalue);
@@ -73,6 +61,37 @@ const Massage = () => {
     });
   }, []);
 
+  let handlemsgClick = () => {
+    set(push(ref(db, "messagelist/")), {
+      senderid: data.uid,
+      sender: data.displayName,
+      senderImage: data.photoURL,
+      receiver: chatdata.username,
+      receiverid: chatdata.id,
+      receiverImage: chatdata.Image,
+      message: massage,
+      date: `${new Date().getFullYear()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getDate()}-${new Date().getHours()}-${new Date().getMinutes()}-${new Date().getSeconds()}`,
+    });
+  };
+  useEffect(() => {
+    const messageref = ref(db, "messagelist/");
+    if (chatdata !== "null") {
+      onValue(messageref, (snapshot) => {
+        let array = [];
+        snapshot.forEach((item) => {
+          if (
+            data.uid == item.val().senderid ||
+            data.uid == item.val().receiverid
+          ) {
+            array.push({ ...item.val(), key: item.key });
+          }
+        });
+        setMessagelist(array);
+      });
+    }
+  }, []);
   return (
     <>
       <div className="flex items-center gap-14">
@@ -205,78 +224,66 @@ const Massage = () => {
             </div>
           )}
         </div>
-        <header className="w-[1110px] h-screen py-[35px]">
-          <div className="w-full h-full shadow-2xl rounded-[40px]">
-            <div className="container w-[1000px] h-[75%] mx-auto py-6">
-              <div className="flex items-center justify-between border-b border-[rgb(0,0,0,.1)] pb-2 ">
-                <div className="flex items-center gap-4">
-                  <img
-                    className="w-[75px] h-[75px] rounded-full "
-                    src="defult.jpg"
-                    alt="dfl"
-                  />
-                  <div>
-                    <h3>{chatdata?.username}</h3>
-                    <p>online</p>
+        {chatdata && (
+          <header className="w-[1110px] h-screen py-[35px]">
+            <div className="w-full h-full shadow-2xl rounded-[40px]">
+              <div className="container w-[1000px] h-[75%] mx-auto py-6">
+                <div className="flex items-center justify-between border-b border-[rgb(0,0,0,.1)] pb-2 ">
+                  <div className="flex items-center gap-4">
+                    <img
+                      className="w-[75px] h-[75px] rounded-full "
+                      src="defult.jpg"
+                      alt="dfl"
+                    />
+                    <div>
+                      <h3>{chatdata?.username}</h3>
+                      <p>online</p>
+                    </div>
                   </div>
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
                 </div>
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </div>
-              <div className="w-full h-full bg-white mt-5 overflow-y-scroll p-[30px] ">
-                <div class="box sb2 w-[300px] bg-[#F1F1F1] p-[20px] mb-6 text-center text-[#707070] relative">
-                  I'm speech bubble
-                </div>
-                <div class="box sb2 w-[300px] bg-[#F1F1F1] p-[20px] text-center text-[#707070] relative">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Impedit, fuga ab reprehenderit nostrum consectetur similique,
-                  eos libero qui placeat asperiores quas, laboriosam doloremque
-                  eligendi incidunt itaque vitae velit ea. Vitae excepturi
-                  ratione sapiente culpa facere. Eum autem voluptatum omnis
-                  asperiores quidem doloremque soluta quam temporibus
-                  voluptatibus debitis. Provident, ea molestias.
-                </div>
-
-                <div className=" mili mt-[40px] ">
-                  <div class="box sb1 w-[300px] bg-[#00bfb6] mb-6 text-center  text-[#FFF] relative ">
-                    <p className="w-[300px] p-[25px]"> I'm speech bubble</p>
-                  </div>
-                  <div class="box sb1 w-[300px] bg-[#00bfb6] mb-6 text-center  text-[#FFF] relative ">
-                    <p className="w-[300px] p-[25px]"> I'm speech bubble</p>
-                  </div>
-                  <div class="box sb1 w-[300px] bg-[#00bfb6] text-center text-[#FFF] relative ">
-                    <p className="w-[300px] p-[25px]">
-                      {" "}
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Necessitatibus facere dignissimos iure eius cupiditate
-                      ipsa assumenda, voluptates corporis id explicabo illo ad
-                      vel pariatur et saepe, quas inventore unde quos.
-                      Doloribus, veniam possimus laboriosam facere cum
-                      blanditiis numquam, exercitationem nulla pariatur eum
-                      earum corporis dolor labore consectetur. Ipsa, magnam est!
-                    </p>
+                <div className="w-full h-full bg-white mt-5 overflow-y-scroll p-[30px] ">
+                  <div className=" mili mt-[40px] ">
+                    {messagelist.map((item) =>
+                      data.uid == item.senderid ? (
+                        <div class="box sb1 w-[300px] bg-[#00bfb6] mb-6 text-center  text-[#FFF] relative ">
+                          <p className="w-[300px] p-[25px]">{item.message}</p>
+                        </div>
+                      ) : (
+                        <div class="box sb2 w-[300px] bg-[#F1F1F1] p-[20px] mb-6 text-center text-[#707070] relative">
+                          <p className="w-[300px] p-[25px]">{item.message}</p>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="footer w-[1000px]  mx-auto mt-[100px] ">
-              <div className="flex justify-between gap-[20px] items-center border-t border-[rgb(0,0,0,.1)] pt-[35px]">
-                <div className="w-[940px] h-[50px] relative">
-                  <input
-                    className="w-full h-full  rounded-[10px] bg-[#F1F1F1] outline-none pl-7 pr-[100px]"
-                    type="text"
-                  />
-                  <div className="absolute top-[50%] translate-y-[-50%] right-[20px]  gap-[18px] flex">
-                    <i class="fa-solid fa-face-smile cursor-pointer text-[18px] text-[#707070]"></i>
-                    <i class="fa-solid fa-camera-retro text-[18px] cursor-pointer  text-[#707070]"></i>
+              <div className="footer w-[1000px]  mx-auto mt-[100px] ">
+                <div className="flex justify-between gap-[20px] items-center border-t border-[rgb(0,0,0,.1)] pt-[35px]">
+                  <div className="w-[940px] h-[50px] relative">
+                    <textarea
+                      onChange={(e) => {
+                        setMassage(e.target.value);
+                      }}
+                      className="w-full h-full  rounded-[10px] bg-[#F1F1F1] py-[15px] outline-none pl-7 pr-[100px]"
+                      type="text"
+                    />
+                    <div className="absolute top-[50%] translate-y-[-50%] right-[20px]  gap-[18px] flex">
+                      <i class="fa-solid fa-face-smile cursor-pointer text-[18px] text-[#707070]"></i>
+                      <i class="fa-solid fa-camera-retro text-[18px] cursor-pointer  text-[#707070]"></i>
+                    </div>
                   </div>
+                  <button
+                    onClick={handlemsgClick}
+                    className="text-[18px] text-white bg-[#5F35F5] px-[16px] py-[12px] rounded-[10px]"
+                  >
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
                 </div>
-                <button className="text-[18px] text-white bg-[#5F35F5] px-[16px] py-[12px] rounded-[10px]">
-                  <i class="fa-solid fa-paper-plane"></i>
-                </button>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
+        )}
       </div>
     </>
   );

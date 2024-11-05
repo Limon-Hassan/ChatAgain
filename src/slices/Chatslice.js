@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  value: null,
+  value:null,
 }
 
 export const Chatslice = createSlice({

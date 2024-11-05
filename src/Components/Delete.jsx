@@ -71,21 +71,20 @@ const Delete = ({ item, data }) => {
   let handleonclick = (item) => {
     if (data.uid == item.senderid) {
       disparch(
-        chatiinginfo({ username: item.receivername, id: item.receiverid })
+        chatiinginfo({
+          username: item.receivername,
+          id: item.receiverid,
+          Image: item.receiverimage,
+        })
       );
     } else {
-      disparch(chatiinginfo({ username: item.sendername, id: item.senderid }));
-    }
-    if (data.uid == item.senderid) {
-      set(push(ref(db, "messagelist/")), {
-        username: item.receivername,
-        userid: item.receiverid,
-      });
-    } else {
-      set(push(ref(db, "messagelist/")), {
-        username: item.sendername,
-        userid: item.senderid,
-      });
+      disparch(
+        chatiinginfo({
+          username: item.sendername,
+          id: item.senderid,
+          Image: item.senderimage,
+        })
+      );
     }
   };
   return (
