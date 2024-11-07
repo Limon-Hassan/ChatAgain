@@ -73,6 +73,8 @@ const Massage = () => {
       date: `${new Date().getFullYear()}-${
         new Date().getMonth() + 1
       }-${new Date().getDate()}-${new Date().getHours()}-${new Date().getMinutes()}-${new Date().getSeconds()}`,
+    }).then(() => {
+      setMassage("");
     });
   };
   useEffect(() => {
@@ -82,8 +84,10 @@ const Massage = () => {
         let array = [];
         snapshot.forEach((item) => {
           if (
-            data.uid == item.val().senderid ||
-            data.uid == item.val().receiverid
+            (data.uid == item.val().senderid &&
+              chatdata.id == item.val().receiverid) ||
+            (chatdata.id == item.val().senderid &&
+              data.uid == item.val().receiverid)
           ) {
             array.push({ ...item.val(), key: item.key });
           }
@@ -232,7 +236,7 @@ const Massage = () => {
                   <div className="flex items-center gap-4">
                     <img
                       className="w-[75px] h-[75px] rounded-full "
-                      src="defult.jpg"
+                      src={chatdata.Image}
                       alt="dfl"
                     />
                     <div>
@@ -243,19 +247,23 @@ const Massage = () => {
                   <i class="fa-solid fa-ellipsis-vertical"></i>
                 </div>
                 <div className="w-full h-full bg-white mt-5 overflow-y-scroll p-[30px] ">
-                  <div className=" mili mt-[40px] ">
-                    {messagelist.map((item) =>
-                      data.uid == item.senderid ? (
+                  {messagelist.map((item) =>
+                    data.uid == item.senderid ? (
+                      <div className=" mili mt-[40px] ">
                         <div class="box sb1 w-[300px] bg-[#00bfb6] mb-6 text-center  text-[#FFF] relative ">
-                          <p className="w-[300px] p-[25px]">{item.message}</p>
+                          <p className="w-[300px] p-[25px] break-words">
+                            {item.message}
+                          </p>
                         </div>
-                      ) : (
-                        <div class="box sb2 w-[300px] bg-[#F1F1F1] p-[20px] mb-6 text-center text-[#707070] relative">
-                          <p className="w-[300px] p-[25px]">{item.message}</p>
-                        </div>
-                      )
-                    )}
-                  </div>
+                      </div>
+                    ) : (
+                      <div class="box sb2 w-[300px] bg-[#F1F1F1]  mb-6 text-center text-[#707070] relative">
+                        <p className="w-[300px] p-[25px] break-words">
+                          {item.message}
+                        </p>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
               <div className="footer w-[1000px]  mx-auto mt-[100px] ">
@@ -267,6 +275,7 @@ const Massage = () => {
                       }}
                       className="w-full h-full  rounded-[10px] bg-[#F1F1F1] py-[15px] outline-none pl-7 pr-[100px]"
                       type="text"
+                      value={massage}
                     />
                     <div className="absolute top-[50%] translate-y-[-50%] right-[20px]  gap-[18px] flex">
                       <i class="fa-solid fa-face-smile cursor-pointer text-[18px] text-[#707070]"></i>
