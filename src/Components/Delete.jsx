@@ -3,6 +3,7 @@ import { ref, remove, set, push, getDatabase } from "firebase/database";
 import { useDispatch, useSelector } from "react-redux";
 import { chatiinginfo } from "../slices/Chatslice";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Delete = ({ item, data }) => {
   let [will, setWill] = useState(false);
@@ -154,7 +155,9 @@ const Delete = ({ item, data }) => {
                 <span className="ml-2">Block</span>
               </div>
               <div className="mb-2 w-full h-full  hover:bg-cyan-400">
-                <span className="ml-2">#Something</span>
+                <Link to="/massage" className="ml-2">
+                  Message
+                </Link>
               </div>
               <div className=" w-full h-full  hover:bg-cyan-400">
                 <span className="ml-2">#Something</span>
