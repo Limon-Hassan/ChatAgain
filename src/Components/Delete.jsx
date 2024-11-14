@@ -15,7 +15,7 @@ const Delete = ({ item, data }) => {
     let handler = (event) => {
       if (!menuref.current.contains(event.target)) {
         setWill(false);
-      }
+      } 
     };
     document.addEventListener("mousedown", handler);
     return () => {
@@ -52,22 +52,6 @@ const Delete = ({ item, data }) => {
       });
     }
   };
-  //   if (data.uid == item.senderid) {
-  //     disparch(
-  //       chatiinginfo({ username: item.receivername, id: item.receiverid })
-  //     );
-  //   } else {
-  //     disparch(chatiinginfo({ username: item.sendername, id: item.senderid }));
-  //   }
-  //   const messageref = ref(db, "messagelist/");
-  //   onValue(messageref, (snapshot) => {
-  //     let array = [];
-  //     snapshot.forEach((item) => {
-  //       array.push({ ...item.val(), key: item.key });
-  //     });
-  //     setMessagelist(array);
-  //   });
-  // }, []);
 
   let handleonclick = (item) => {
     if (data.uid == item.senderid) {
@@ -125,7 +109,7 @@ const Delete = ({ item, data }) => {
               </a>
             )}
             <p className="text-[12px] font-Harbal font-normal text-[rgb(77,77,77,7.5)] ">
-              Dinner?
+              Dinner? 
             </p>
           </div>
         </div>
