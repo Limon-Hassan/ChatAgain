@@ -98,7 +98,6 @@ const Login = () => {
         });
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         const email = error.customData.email;
